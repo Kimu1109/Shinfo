@@ -2,7 +2,7 @@
 
 Quickly sharing information
 
-![application-icon](https://github.com/Kimu1109/Shinfo/blob/master/Shinfo.svg?raw=true)
+![application-icon](https://github.com/Kimu1109/Shinfo/blob/master/Shinfo.png)
 
 ## Summary
 

@@ -1,9 +1,0 @@
-<?xml version="1.1"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" Height="75px" Width="75px">
-
-    <circle cx="150" cy="45" r="45" fill="#4f83cc" />
-    <rect x="105" y="99" width="90" height="195" rx="30" ry="30"  fill="#4f83cc"/>
-
-    <path d="M 90 120 H 60 S 30 120 30 150 V 180 S 30 210 60 210 H 120 S 150 210 150 180" stroke="#002f6c" fill="transparent" stroke-width="30"/>
-    <path d="M 150 150 V 150 S 150 120 180 120 H 240 S 270 120 270 150 V 180 S 270 210 240 210 H 210" stroke="#002f6c" fill="transparent" stroke-width="30"/>
-</svg>

@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-<svg xmlns="http://www.w3.org/2000/svg">
-
-    <rect x="0" y="0" height="300" width="300" fill="transparent"/>
+<svg xmlns="http://www.w3.org/2000/svg" Height="300" Width="300">
 
     <circle cx="150" cy="45" r="45" fill="#4f83cc" />
     <rect x="105" y="99" width="90" height="195" rx="30" ry="30"  fill="#4f83cc"/>

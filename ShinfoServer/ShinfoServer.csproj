@@ -62,8 +62,11 @@
     <Compile Include="Dialog\AddGroup.xaml.cs">
       <DependentUpon>AddGroup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialog\AddUser.xaml.cs">
-      <DependentUpon>AddUser.xaml</DependentUpon>
+    <Compile Include="Dialog\AddUserAtUsers.xaml.cs">
+      <DependentUpon>AddUserAtUsers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\SelectUser.xaml.cs">
+      <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
     <Compile Include="GroupData.cs" />
     <Compile Include="ProcessOfApp.cs" />
@@ -75,7 +78,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialog\AddUser.xaml">
+    <Page Include="Dialog\AddUserAtUsers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\SelectUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

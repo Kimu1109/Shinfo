@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShinfoServer.Dialog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,6 +46,46 @@ namespace ShinfoServer
                 else
                 {
 
+                }
+            }
+        }
+
+        private void AddGroup_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
+            if(SelectedItem == null)
+            {
+                new AddGroup() { Group = null }.Show();
+            }
+            else
+            {
+                if (SelectedItem.IsGroup)
+                {
+                    new AddGroup() { Group = SelectedItem as GroupData }.Show();
+                }
+                else
+                {
+                    new AddGroup() { Group = (SelectedItem as UserData).Parent }.Show();
+                }
+            }
+        }
+
+        private void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
+            if(SelectedItem == null)
+            {
+                MessageBox.Show("ユーザーまたは、グループを選択してください。");
+            }
+            else
+            {
+                if (SelectedItem.IsGroup)
+                {
+                    
+                }
+                else
+                {
+                    
                 }
             }
         }

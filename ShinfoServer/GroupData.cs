@@ -6,10 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ShinfoServer
 {
-    internal class GroupData : INotifyPropertyChanged, UserAndGroupTree
+    public class GroupData : INotifyPropertyChanged, UserAndGroupTree
     {
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
@@ -17,6 +18,7 @@ namespace ShinfoServer
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         // <---
         public bool IsGroup { get => true; }
+        public BitmapImage Image { get => Data.GroupIcon; }
 
         private string _name;
         public string Name
@@ -30,7 +32,7 @@ namespace ShinfoServer
         }
 
         private string _id;
-        internal string ID
+        public string ID
         {
             get => _id;
             set
@@ -41,7 +43,7 @@ namespace ShinfoServer
         }
 
         private string _description;
-        internal string Description
+        public string Description
         {
             get => _description;
             set
@@ -52,7 +54,7 @@ namespace ShinfoServer
         }
 
         private UserData.UserLevel _groupLevel;
-        internal UserData.UserLevel GroupLevel
+        public UserData.UserLevel Level
         {
             get => _groupLevel;
             set
@@ -62,9 +64,9 @@ namespace ShinfoServer
             }
         }
 
-        internal GroupData Parent { get; set; }
-        internal ObservableCollection<GroupData> Children { get; set; }
-        internal ObservableCollection<UserData> Users { get; set; }
+        public GroupData Parent { get; set; }
+        public ObservableCollection<GroupData> Children { get; set; } = new ObservableCollection<GroupData>();
+        public ObservableCollection<UserData> Users { get; set; } = new ObservableCollection<UserData>();
         public ObservableCollection<UserAndGroupTree> Nodes 
         { 
             get

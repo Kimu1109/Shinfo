@@ -11,7 +11,7 @@ using static ShinfoServer.Data;
 
 namespace ShinfoServer
 {
-    internal static partial class Process
+    public static partial class Process
     {
         public static FileIniDataParser parser = new FileIniDataParser();
         public static string[] GetDirectories(string path)
@@ -170,7 +170,7 @@ namespace ShinfoServer
                 if (System.IO.Path.GetFileName(DataPath).IndexOf('.') == -1) return IOResult.NamingError;
                 if (File.Exists(DataPath)) return IOResult.ExistError;
                 if (!Directory.Exists(System.IO.Path.GetDirectoryName(DataPath))) return IOResult.NotExistError;
-                if (GetOnlyUserLevelByIniFile(ParentInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfWrite;
+                if (GetOnlyUserLevelByIniFile(ParentInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfWrite;
 
                 var st = new StringBuilder();
                 st.AppendLine("[Info]");
@@ -187,10 +187,10 @@ namespace ShinfoServer
                 st.AppendLine("MakeTime = " + DateTime.Now.ToString());
 
                 st.AppendLine("[Access]");
-                st.AppendLine("Read = " + UserData.userLevel.ToString());
-                st.AppendLine("Write = " + UserData.userLevel.ToString());
-                st.AppendLine("View = " + UserData.userLevel.ToString());
-                st.AppendLine("Delete = " + UserData.userLevel.ToString());
+                st.AppendLine("Read = " + UserData.Level.ToString());
+                st.AppendLine("Write = " + UserData.Level.ToString());
+                st.AppendLine("View = " + UserData.Level.ToString());
+                st.AppendLine("Delete = " + UserData.Level.ToString());
 
                 File.Create(DataPath);
                 File.WriteAllText(InfoPath, st.ToString());
@@ -213,7 +213,7 @@ namespace ShinfoServer
 
                 if (!File.Exists(DataPath)) return IOResult.NotExistError;
 
-                if (GetOnlyUserLevelByIniFile(InfoPath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(InfoPath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
 
                 File.Delete(InfoPath);
                 File.Delete(DataPath);
@@ -240,8 +240,8 @@ namespace ShinfoServer
 
                 string AfterDirInfoPath = GetInfoPathFromPath(GetFirstParentFromPath(AfterPath), true);
 
-                if (GetOnlyUserLevelByIniFile(AfterDirInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfWrite;
-                if (GetOnlyUserLevelByIniFile(BeforeInfoPath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(AfterDirInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfWrite;
+                if (GetOnlyUserLevelByIniFile(BeforeInfoPath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
                 if (File.Exists(AfterDataPath)) return IOResult.ExistError;
                 if (!File.Exists(BeforeDataPath)) return IOResult.NotExistError;
                 if (!Directory.Exists(Path.GetDirectoryName(AfterDataPath))) return IOResult.NotExistError;
@@ -271,8 +271,8 @@ namespace ShinfoServer
 
                 string PasteDirInfoPath = GetInfoPathFromPath(GetFirstParentFromPath(PastePath), true);
 
-                if (GetOnlyUserLevelByIniFile(PasteDirInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfWrite;
-                if (GetOnlyUserLevelByIniFile(SourceInfoPath, "Access", "Read") > UserData.userLevel) return IOResult.LevelMissOfRead;
+                if (GetOnlyUserLevelByIniFile(PasteDirInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfWrite;
+                if (GetOnlyUserLevelByIniFile(SourceInfoPath, "Access", "Read") > UserData.Level) return IOResult.LevelMissOfRead;
                 if (File.Exists(PasteDataPath)) return IOResult.ExistError;
                 if (!File.Exists(SourceDataPath)) return IOResult.NotExistError;
                 if (!Directory.Exists(Path.GetDirectoryName(PasteDataPath))) return IOResult.NotExistError;
@@ -325,7 +325,7 @@ namespace ShinfoServer
 
                 var data = parser.ReadFile(InfoPath, Encoding.UTF8);
 
-                if (StringToUserLevel(data["Access"]["Write"]) > UserData.userLevel) return IOResult.LevelMissOfWrite;
+                if (StringToUserLevel(data["Access"]["Write"]) > UserData.Level) return IOResult.LevelMissOfWrite;
 
                 data["Time"]["LastWrote"] = DateTime.Now.ToString();
                 data["User"]["LastWrote"] = UserData.userID;
@@ -360,7 +360,7 @@ namespace ShinfoServer
 
                 var data = parser.ReadFile(IniPath, Encoding.UTF8);
 
-                if (StringToUserLevel(data["Access"]["Read"]) > UserData.userLevel) return (null, IOResult.LevelMissOfRead);
+                if (StringToUserLevel(data["Access"]["Read"]) > UserData.Level) return (null, IOResult.LevelMissOfRead);
 
                 data["Time"]["LastRead"] = DateTime.Now.ToString();
                 data["User"]["LastRead"] = UserData.userID;
@@ -386,7 +386,7 @@ namespace ShinfoServer
 
                 var data = parser.ReadFile(DataPath, Encoding.UTF8);
 
-                if (StringToUserLevel(data["Access"]["Read"]) > UserData.userLevel) return (null, IOResult.LevelMissOfRead);
+                if (StringToUserLevel(data["Access"]["Read"]) > UserData.Level) return (null, IOResult.LevelMissOfRead);
 
                 data["Time"]["LastRead"] = DateTime.Now.ToString();
                 data["User"]["LastRead"] = UserData.userID;
@@ -410,7 +410,7 @@ namespace ShinfoServer
 
                 if (!File.Exists(WritePath)) return IOResult.NotExistError;
 
-                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfWrite;
+                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfWrite;
 
                 var data = parser.ReadFile(WritePath, Encoding.UTF8);
 
@@ -438,12 +438,12 @@ namespace ShinfoServer
 
                 if (!File.Exists(WritePath)) return IOResult.NotExistError;
 
-                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
 
-                if ((Read > UserData.userLevel) ||
-                    (Write > UserData.userLevel) ||
-                    (View > UserData.userLevel) ||
-                    (Delete > UserData.userLevel))
+                if ((Read > UserData.Level) ||
+                    (Write > UserData.Level) ||
+                    (View > UserData.Level) ||
+                    (Delete > UserData.Level))
                 {
                     return IOResult.CanNotSetUpperThanYours;
                 }
@@ -497,7 +497,7 @@ namespace ShinfoServer
                 if (DataPath.IndexOf('.') != -1) return IOResult.NamingError;
                 if (Directory.Exists(DataPath)) return IOResult.ExistError;
                 if (!Directory.Exists(System.IO.Path.GetDirectoryName(DataPath))) return IOResult.NotExistError;
-                if (GetOnlyUserLevelByIniFile(ParentInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfWrite;
+                if (GetOnlyUserLevelByIniFile(ParentInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfWrite;
 
                 Directory.CreateDirectory(DataPath);
                 Directory.CreateDirectory(InfoDirPath);
@@ -507,10 +507,10 @@ namespace ShinfoServer
                 st.AppendLine("Description = " + Description);
 
                 st.AppendLine("[Access]");
-                st.AppendLine("Read = " + UserData.userLevel.ToString());
-                st.AppendLine("Write = " + UserData.userLevel.ToString());
-                st.AppendLine("View = " + UserData.userLevel.ToString());
-                st.AppendLine("Delete = " + UserData.userLevel.ToString());
+                st.AppendLine("Read = " + UserData.Level.ToString());
+                st.AppendLine("Write = " + UserData.Level.ToString());
+                st.AppendLine("View = " + UserData.Level.ToString());
+                st.AppendLine("Delete = " + UserData.Level.ToString());
 
                 File.WriteAllText(InfoPath, st.ToString());
 
@@ -532,7 +532,7 @@ namespace ShinfoServer
                 string InfoPath = GetInfoPathFromPath(Path, true);
 
                 if (!Directory.Exists(DataPath)) return IOResult.NotExistError;
-                if (GetOnlyUserLevelByIniFile(InfoPath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(InfoPath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
 
                 File.Delete(InfoPath);
                 Directory.Delete(DataPath);
@@ -567,8 +567,8 @@ namespace ShinfoServer
                 if (!Directory.Exists(AfterDataPath)) return IOResult.NotExistError;
                 if (Directory.Exists(MovePath)) return IOResult.ExistError;
 
-                if (GetOnlyUserLevelByIniFile(BeforeInfoPath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
-                if (GetOnlyUserLevelByIniFile(AfterInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(BeforeInfoPath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(AfterInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfDelete;
 
                 Directory.Move(BeforeDataPath, MovePath);
                 Directory.Move(BeforeInfoDirPath, MoveInfoDirPath);
@@ -603,8 +603,8 @@ namespace ShinfoServer
                 if (!Directory.Exists(PastePath)) return IOResult.NotExistError;
                 if (Directory.Exists(CopyPath)) return IOResult.ExistError;
 
-                if (GetOnlyUserLevelByIniFile(SourceInfoPath, "Access", "Read") > UserData.userLevel) return IOResult.LevelMissOfDelete;
-                if (GetOnlyUserLevelByIniFile(PasteInfoPath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(SourceInfoPath, "Access", "Read") > UserData.Level) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(PasteInfoPath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfDelete;
 
                 CopyDirectory(SourceDataPath, CopyPath);
                 CopyDirectory(SourceInfoDirPath, CopyInfoDirPath);
@@ -627,7 +627,7 @@ namespace ShinfoServer
                 string ReadInfoPath = GetInfoPathFromPath(Path, true);
 
                 if (!Directory.Exists(ReadDataPath)) return (null, IOResult.NotExistError);
-                if (GetOnlyUserLevelByIniFile(ReadInfoPath, "Access", "Read") > UserData.userLevel) return (null, IOResult.LevelMissOfRead);
+                if (GetOnlyUserLevelByIniFile(ReadInfoPath, "Access", "Read") > UserData.Level) return (null, IOResult.LevelMissOfRead);
 
                 var files = Directory.GetFiles(ReadDataPath, "*", SearchOption.TopDirectoryOnly);
                 var dirs = Directory.GetDirectories(ReadDataPath, "*", SearchOption.TopDirectoryOnly);
@@ -639,7 +639,7 @@ namespace ShinfoServer
                 {
                     string fileIni = GetInfoPathFromPath(GetRelativePath(file), false);
                     var fileDat = parser.ReadFile(fileIni, Encoding.UTF8);
-                    if (!(GetOnlyUserLevelByIniFile(fileIni, "Access", "View") > UserData.userLevel))
+                    if (!(GetOnlyUserLevelByIniFile(fileIni, "Access", "View") > UserData.Level))
                     {
                         st.AppendLine("<File>");
                         st.AppendLine($"<Name>{IO.Path.GetFileName(file)}</Name>");
@@ -662,7 +662,7 @@ namespace ShinfoServer
                 {
                     string dirIni = GetInfoPathFromPath(GetRelativePath(dir), true);
                     var dirDat = parser.ReadFile(dirIni, Encoding.UTF8);
-                    if (!(GetOnlyUserLevelByIniFile(dirIni, "Access", "View") > UserData.userLevel))
+                    if (!(GetOnlyUserLevelByIniFile(dirIni, "Access", "View") > UserData.Level))
                     {
                         st.AppendLine("<Directory>");
                         st.AppendLine($"<Name>{IO.Path.GetFileName(dir)}</Name>");
@@ -695,7 +695,7 @@ namespace ShinfoServer
                 string WritePath = GetInfoPathFromPath(Path, true);
 
                 if (!Directory.Exists(WritePath)) return IOResult.NotExistError;
-                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Write") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Write") > UserData.Level) return IOResult.LevelMissOfDelete;
 
                 var data = parser.ReadFile(WritePath, Encoding.UTF8);
 
@@ -738,12 +738,12 @@ namespace ShinfoServer
                     if (parentRead > Read || parentWrite > Write || parentView > View || parentDelete > Delete) return IOResult.YoursIsUpperThanParent;
                 }
 
-                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Delete") > UserData.userLevel) return IOResult.LevelMissOfDelete;
+                if (GetOnlyUserLevelByIniFile(WritePath, "Access", "Delete") > UserData.Level) return IOResult.LevelMissOfDelete;
 
-                if ((Read > UserData.userLevel) ||
-                    (Write > UserData.userLevel) ||
-                    (View > UserData.userLevel) ||
-                    (Delete > UserData.userLevel))
+                if ((Read > UserData.Level) ||
+                    (Write > UserData.Level) ||
+                    (View > UserData.Level) ||
+                    (Delete > UserData.Level))
                 {
                     return IOResult.CanNotSetUpperThanYours;
                 }

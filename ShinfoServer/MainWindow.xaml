@@ -27,15 +27,18 @@
         <TreeView Name="GroupAndUserTree" Grid.Column="2" ContextMenuOpening="GroupAndUserTree_ContextMenuOpening">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType= "local:UserAndGroupTree" ItemsSource="{Binding Nodes}">
-                    <TextBlock Text="{Binding Name}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="15" Width="15" Source="{Binding Image}"/>
+                        <TextBlock Text="{Binding Name}"/>
+                    </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Name="AddGroup" Header="グループを追加"/>
+                    <MenuItem Name="AddGroup" Click="AddGroup_Click" Header="グループを追加"/>
                     <MenuItem Name="RemoveGroup" Header="グループを削除"/>
                     <Separator/>
-                    <MenuItem Name="AddUser" Header="ユーザーを追加"/>
+                    <MenuItem Name="AddUser" Click="AddUser_Click" Header="ユーザーを追加"/>
                     <MenuItem Name="RemoveUser" Header="ユーザーを削除"/>
                 </ContextMenu>
             </TreeView.ContextMenu>

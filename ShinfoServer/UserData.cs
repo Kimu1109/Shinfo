@@ -6,10 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ShinfoServer
 {
-    internal partial class UserData : INotifyPropertyChanged, UserAndGroupTree
+    public partial class UserData : INotifyPropertyChanged, UserAndGroupTree
     {//一般
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
@@ -17,6 +18,8 @@ namespace ShinfoServer
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         // <---
         public bool IsGroup { get => false; }
+        public BitmapImage Image { get => Data.UserIcon; }
+        public GroupData Parent { get; set; }
 
         private string _name;
         public string Name
@@ -29,7 +32,7 @@ namespace ShinfoServer
             }
         }
         private string _password;
-        internal string password
+        public string password
         {
             get => _password;
             set
@@ -40,7 +43,7 @@ namespace ShinfoServer
         }
 
         private DateTime _connect;
-        internal DateTime connect
+        public DateTime connect
         {
             get => _connect;
             set
@@ -51,7 +54,7 @@ namespace ShinfoServer
         }
 
         private string _userID;
-        internal string userID
+        public string userID
         {
             get => _userID;
             set
@@ -62,7 +65,7 @@ namespace ShinfoServer
         }
 
         private UserLevel _userLevel = UserLevel.Guest;
-        internal UserLevel userLevel
+        public UserLevel Level
         {
             get => _userLevel;
             set
@@ -73,7 +76,7 @@ namespace ShinfoServer
         }
         public ObservableCollection<UserAndGroupTree> Nodes { get; set; }
 
-        internal enum UserLevel
+        public enum UserLevel
         {
             Nothing,
             Guest,
@@ -82,18 +85,18 @@ namespace ShinfoServer
             Admin
         }
     }
-    internal partial class UserData
+    public partial class UserData
     {//送信時
-        internal bool IsSendMode { get; set; }
-        internal bool IsStart { get; set; }
-        internal bool IsCatchBool { get; set; }
-        internal string CatchRequest { get; set; }
+        public bool IsSendMode { get; set; }
+        public bool IsStart { get; set; }
+        public bool IsCatchBool { get; set; }
+        public string CatchRequest { get; set; }
     }
-    internal partial class UserData
+    public partial class UserData
     {//取得時
-        internal bool IsGetMode { get; set; }
-        internal byte[] getBytes { set; get; }
-        internal bool FinishedGet { get; set; }
-        internal int AllSize { get; set; }
+        public bool IsGetMode { get; set; }
+        public byte[] getBytes { set; get; }
+        public bool FinishedGet { get; set; }
+        public int AllSize { get; set; }
     }
 }

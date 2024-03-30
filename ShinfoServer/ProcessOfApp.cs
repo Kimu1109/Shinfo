@@ -7,23 +7,56 @@ using System.IO;
 using System.IO.Compression;
 using static ShinfoServer.Data;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
 
 namespace ShinfoServer
 {
-    internal interface UserAndGroupTree
+    public interface UserAndGroupTree
     {
         string Name { get; set; }
         ObservableCollection<UserAndGroupTree> Nodes { get; set; }
         bool IsGroup { get; }
+        BitmapImage Image { get; }
+        GroupData Parent { get; set; }
     }
 
-    internal static partial class Process
+    public static partial class Process
     {
-        internal static void LogWriteLineByBase(UserData UserData, string message, string info)
+        //パスワードに使用する文字
+        private static readonly string passwordChars = "0123456789abcdefghijklmnopqrstuvwxyz";
+        private static int passwordSeed = Environment.TickCount;
+
+        /// <summary>
+        /// ランダムな文字列を生成する
+        /// </summary>
+        /// <param name="length">生成する文字列の長さ</param>
+        /// <returns>生成された文字列</returns>
+        public static string GeneratePassword(int length)
+        {
+            unchecked
+            {
+                passwordSeed++;
+            }
+            StringBuilder sb = new StringBuilder(length);
+            Random r = new Random(passwordSeed);
+
+            for (int i = 0; i < length; i++)
+            {
+                //文字の位置をランダムに選択
+                int pos = r.Next(passwordChars.Length);
+                //選択された位置の文字を取得
+                char c = passwordChars[pos];
+                //パスワードに追加
+                sb.Append(c);
+            }
+
+            return sb.ToString();
+        }
+        public static void LogWriteLineByBase(UserData UserData, string message, string info)
         {
             File.AppendAllText(AppPath + "\\server.log", UserData.userID + " | " + message + " | " + info);
         }
-        internal static string XmlHeader()
+        public static string XmlHeader()
         {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         }

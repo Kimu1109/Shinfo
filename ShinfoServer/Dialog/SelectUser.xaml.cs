@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace ShinfoServer.Dialog
 {
     /// <summary>
-    /// AddUser.xaml の相互作用ロジック
+    /// SelectUser.xaml の相互作用ロジック
     /// </summary>
-    public partial class AddUser : Window
+    public partial class SelectUser : Window
     {
-        public AddUser()
+        public SelectUser()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {//IDを自動生成
-
         }
     }
 }

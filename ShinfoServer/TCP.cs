@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ShinfoServer
 {
-    internal class TCP
+    public class TCP
     {
         public delegate void TCPEventHandler(object sender, TCPEventArgs e);
 
@@ -170,7 +170,7 @@ namespace ShinfoServer
             public TcpClient Client;
         }
     }
-    internal class Client
+    public class Client
     {
         public TcpClient client;
         public UserData user;

@@ -11,9 +11,9 @@ using static ShinfoServer.Data;
 
 namespace ShinfoServer
 {
-    internal static partial class Process
+    public static partial class Process
     {
-        internal static void GetProcess(Client client_data, byte[] bytes)
+        public static void GetProcess(Client client_data, byte[] bytes)
         {
             Console.WriteLine($"GetRequest:{Encoding.UTF8.GetString(bytes)}");
 
@@ -28,7 +28,7 @@ namespace ShinfoServer
                 client_data.user.IsCatchBool = true;
             }
         }
-        internal static void SendProcess(Client client_data, byte[] bytes)
+        public static void SendProcess(Client client_data, byte[] bytes)
         {
             //チャンクの最初が正しいかどうか
             if (!(
@@ -92,7 +92,7 @@ namespace ShinfoServer
             }
         }
         //クライアントに文字列送信
-        internal static void Send(Client client_data, string message)
+        public static void Send(Client client_data, string message)
         {
             byte[] message_byte = Encoding.UTF8.GetBytes(message);
 
@@ -114,7 +114,7 @@ namespace ShinfoServer
             }
 
         }
-        internal static void SendFile(Client client_data, byte[] byteArr)
+        public static void SendFile(Client client_data, byte[] byteArr)
         {
             Task.Run(() =>
             {
@@ -223,7 +223,7 @@ namespace ShinfoServer
                 client_data.isRemove = true;
             });
         }
-        internal static void SendBytes(Client client_data, byte[] bytes)
+        public static void SendBytes(Client client_data, byte[] bytes)
         {
             Console.WriteLine("バイトを送ります! 長さ:" + bytes.Length.ToString());
             TcpClient client = client_data.client;
@@ -242,7 +242,7 @@ namespace ShinfoServer
                 //切断と同時に送信した場合この例外が発生する
             }
         }
-        internal static async Task<byte[]> ReadBytes(Client client_data)
+        public static async Task<byte[]> ReadBytes(Client client_data)
         {
             var task = Task.Run(() =>
             {
@@ -265,7 +265,7 @@ namespace ShinfoServer
             await task;
             return task.Result;
         }
-        internal static Task<bool> WriteFileByTcp(string path, UserData user, Client client_data)
+        public static Task<bool> WriteFileByTcp(string path, UserData user, Client client_data)
         {
             var task = Task.Run(() =>
             {

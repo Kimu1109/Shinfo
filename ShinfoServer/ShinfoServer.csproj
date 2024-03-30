@@ -59,12 +59,26 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data.cs" />
+    <Compile Include="Dialog\AddGroup.xaml.cs">
+      <DependentUpon>AddGroup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\AddUser.xaml.cs">
+      <DependentUpon>AddUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GroupData.cs" />
     <Compile Include="ProcessOfApp.cs" />
     <Compile Include="ProcessOfFile.cs" />
     <Compile Include="ProcessOfTcp.cs" />
     <Compile Include="TCP.cs" />
     <Compile Include="UserData.cs" />
+    <Page Include="Dialog\AddGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialog\AddUser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

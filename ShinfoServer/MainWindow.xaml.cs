@@ -25,10 +25,28 @@ namespace ShinfoServer
             InitializeComponent();
             Data.tcp = new TCP(2001);
             Data.tcp.Get += ProcessOfGeneral;
+
+            GroupAndUserTree.ItemsSource = Data.Groups;
         }
         private void ProcessOfGeneral(object sender, TCP.TCPEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void GroupAndUserTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
+            if (SelectedItem != null)
+            {
+                if (SelectedItem.IsGroup)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
         }
     }
 }

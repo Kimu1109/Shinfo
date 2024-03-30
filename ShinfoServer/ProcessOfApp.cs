@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using static ShinfoServer.Data;
+using System.Collections.ObjectModel;
 
 namespace ShinfoServer
 {
+    internal interface UserAndGroupTree
+    {
+        string Name { get; set; }
+        ObservableCollection<UserAndGroupTree> Nodes { get; set; }
+        bool IsGroup { get; }
+    }
+
     internal static partial class Process
     {
         internal static void LogWriteLineByBase(UserData UserData, string message, string info)

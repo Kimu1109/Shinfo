@@ -80,7 +80,7 @@ namespace ShinfoServer
                 //クライアントの追加
                 Client client_data = new Client();
                 client_data.client = client;
-                client_data.user = new UserData() { username = "NULL", password = "NULL", connect = DateTime.Now };
+                client_data.user = new UserData() { Name = "NULL", password = "NULL", connect = DateTime.Now };
                 clients.Add(client_data);
 
                 NewClient?.Invoke(this, new EventArgs());
@@ -155,7 +155,7 @@ namespace ShinfoServer
                     foreach (var c in clients)
                     {
                         if (c.isRemove) cl.Add(c);
-                        else if (c.user.username == "NULL" && c.user.password == "NULL" && DateTime.Now - c.user.connect >= oneMinute) cl.Add(c);
+                        else if (c.user.Name == "NULL" && c.user.password == "NULL" && DateTime.Now - c.user.connect >= oneMinute) cl.Add(c);
                     }
                     foreach (var c in cl) clients.Remove(c);
 

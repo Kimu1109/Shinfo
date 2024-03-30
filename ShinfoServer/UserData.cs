@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,21 +9,22 @@ using System.Threading.Tasks;
 
 namespace ShinfoServer
 {
-    internal partial class UserData : INotifyPropertyChanged
+    internal partial class UserData : INotifyPropertyChanged, UserAndGroupTree
     {//一般
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         // <---
+        public bool IsGroup { get => false; }
 
-        private string _username;
-        internal string username
+        private string _name;
+        public string Name
         {
-            get => _username;
+            get => _name;
             set
             {
-                _username = value;
+                _name = value;
                 RaisePropertyChanged();
             }
         }
@@ -69,6 +71,7 @@ namespace ShinfoServer
                 RaisePropertyChanged();
             }
         }
+        public ObservableCollection<UserAndGroupTree> Nodes { get; set; }
 
         internal enum UserLevel
         {

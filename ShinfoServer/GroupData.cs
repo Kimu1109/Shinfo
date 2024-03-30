@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 
 namespace ShinfoServer
 {
-    internal class GroupData : INotifyPropertyChanged
+    internal class GroupData : INotifyPropertyChanged, UserAndGroupTree
     {
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         // <---
+        public bool IsGroup { get => true; }
 
         private string _name;
-        internal string Name
+        public string Name
         {
             get => _name;
             set
@@ -63,7 +64,20 @@ namespace ShinfoServer
 
         internal GroupData Parent { get; set; }
         internal ObservableCollection<GroupData> Children { get; set; }
-
         internal ObservableCollection<UserData> Users { get; set; }
+        public ObservableCollection<UserAndGroupTree> Nodes 
+        { 
+            get
+            {
+                var arr = new ObservableCollection<UserAndGroupTree>();
+                foreach(var c in Children) arr.Add(c as UserAndGroupTree);
+                foreach(var u in Users) arr.Add(u as UserAndGroupTree);
+                return arr;
+            }
+            set
+            {
+                RaisePropertyChanged();
+            }
+        }
     }
 }

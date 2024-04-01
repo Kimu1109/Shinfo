@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShinfoServer
+namespace TcpForServer
 {
     public class TCP
     {
@@ -175,4 +175,5 @@ namespace ShinfoServer
 
         public bool isRemove;
     }
+
 }

@@ -15,26 +15,29 @@ using System.Windows.Shapes;
 namespace ShinfoServer.Dialog
 {
     /// <summary>
-    /// SelectUser.xaml の相互作用ロジック
+    /// EditUser.xaml の相互作用ロジック
     /// </summary>
-    public partial class SelectUser : Window
+    public partial class EditUser : Window
     {
-        public UserData SelectedUser;
-        public SelectUser()
+        public UserData User;
+        public EditUser(UserData user)
         {
+            this.DataContext = user;
+            this.User = user;
             InitializeComponent();
-            UserList.ItemsSource = Data.Users;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {//OK
-            SelectedUser = UserList.SelectedItem as UserData;
-            this.DialogResult = SelectedUser != null ? true : false;
+            this.User.Name = NameBox.Text;
+            this.User.ID = IdBox.Text;
+            this.User.Level = (UserData.UserLevel)LevelCombo.SelectedIndex;
+            this.DialogResult = true;
             this.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
-        {//キャンセル
+        {//Cancel
             this.DialogResult = false;
             this.Close();
         }

@@ -1,0 +1,17 @@
+﻿<Window x:Class="Shinfo.FileCom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shinfo"
+        mc:Ignorable="d"
+        Title="FileCom" Height="300" Width="450">
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Name="Persent" Text="10%完了" Margin="10" TextAlignment="Center" Style="{StaticResource MaterialDesignHeadline5TextBlock}"/>
+            <TextBlock Name="Speed" Text="10Kb/s" TextAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+            <TextBlock Name="Fine" Text="残り10Kb" TextAlignment="Center" Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+            <ProgressBar Name="Progress" Height="20" Margin="10"/>
+        </StackPanel>
+    </Grid>
+</Window>

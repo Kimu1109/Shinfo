@@ -177,9 +177,9 @@ namespace ShinfoServer
                 st.AppendLine("Description = " + Description);
 
                 st.AppendLine("[User]");
-                st.AppendLine("LastWrote = " + UserData.userID);
-                st.AppendLine("LastRead = " + UserData.userID);
-                st.AppendLine("MakeUser = " + UserData.userID);
+                st.AppendLine("LastWrote = " + UserData.ID);
+                st.AppendLine("LastRead = " + UserData.ID);
+                st.AppendLine("MakeUser = " + UserData.ID);
 
                 st.AppendLine("[Time]");
                 st.AppendLine("LastWrote = " + DateTime.Now.ToString());
@@ -328,7 +328,7 @@ namespace ShinfoServer
                 if (StringToUserLevel(data["Access"]["Write"]) > UserData.Level) return IOResult.LevelMissOfWrite;
 
                 data["Time"]["LastWrote"] = DateTime.Now.ToString();
-                data["User"]["LastWrote"] = UserData.userID;
+                data["User"]["LastWrote"] = UserData.ID;
 
                 parser.WriteFile(InfoPath, data, Encoding.UTF8);
 
@@ -363,7 +363,7 @@ namespace ShinfoServer
                 if (StringToUserLevel(data["Access"]["Read"]) > UserData.Level) return (null, IOResult.LevelMissOfRead);
 
                 data["Time"]["LastRead"] = DateTime.Now.ToString();
-                data["User"]["LastRead"] = UserData.userID;
+                data["User"]["LastRead"] = UserData.ID;
 
                 parser.WriteFile(IniPath, data, Encoding.UTF8);
 
@@ -389,7 +389,7 @@ namespace ShinfoServer
                 if (StringToUserLevel(data["Access"]["Read"]) > UserData.Level) return (null, IOResult.LevelMissOfRead);
 
                 data["Time"]["LastRead"] = DateTime.Now.ToString();
-                data["User"]["LastRead"] = UserData.userID;
+                data["User"]["LastRead"] = UserData.ID;
 
                 parser.WriteFile(DataPath, data, Encoding.UTF8);
 

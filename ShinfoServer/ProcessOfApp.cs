@@ -17,9 +17,7 @@ namespace ShinfoServer
         ObservableCollection<UserAndGroupTree> Nodes { get; set; }
         bool IsGroup { get; }
         BitmapImage Image { get; }
-        GroupData Parent { get; set; }
     }
-
     public static partial class Process
     {
         //パスワードに使用する文字
@@ -54,7 +52,7 @@ namespace ShinfoServer
         }
         public static void LogWriteLineByBase(UserData UserData, string message, string info)
         {
-            File.AppendAllText(AppPath + "\\server.log", UserData.userID + " | " + message + " | " + info);
+            File.AppendAllText(AppPath + "\\server.log", UserData.ID + " | " + message + " | " + info);
         }
         public static string XmlHeader()
         {

@@ -12,18 +12,18 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.ColumnSpan="2" FontSize="28" Text="ユーザーを追加"/>
+        <TextBlock Grid.ColumnSpan="2" FontSize="28" Text="Add user"/>
         <StackPanel Grid.Column="0" Margin="0,40,0,0" HorizontalAlignment="Right">
-            <TextBlock Text="名前" Height="30" HorizontalAlignment="Right"/>
+            <TextBlock Text="Name" Height="30" HorizontalAlignment="Right"/>
             <TextBlock Text="ID" Height="30" HorizontalAlignment="Right"/>
-            <TextBlock Text="パスワード" Height="30" HorizontalAlignment="Right"/>
-            <TextBlock Text="権限" Height="30" HorizontalAlignment="Right"/>
+            <TextBlock Text="Password" Height="30" HorizontalAlignment="Right"/>
+            <TextBlock Text="Level" Height="30" HorizontalAlignment="Right"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="5,40,0,0">
             <TextBox Name="NameBox" Text="DefaultName" Height="30"/>
             <StackPanel Orientation="Horizontal">
                 <TextBox Name="IdBox" Text="RandomID" Height="30"/>
-                <Button Content="IDを自動生成" Margin="5,0,0,0" Click="Button_Click"/>
+                <Button Content="Create ID to random" Margin="5,0,0,0" Click="Button_Click"/>
             </StackPanel>
             <TextBox Name="PasswordBox" Text="" Height="30"/>
             <ComboBox Name="LevelCombo" SelectedIndex="2">
@@ -35,7 +35,7 @@
             </ComboBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Grid.Column="1">
-            <Button Content="キャンセル" Margin="5" Background="LightYellow" Click="Button_Click_2"/>
+            <Button Content="Cancel" Margin="5" Background="LightYellow" Click="Button_Click_2"/>
             <Button Content="OK" Margin="5" Background="LightGreen" Click="Button_Click_1"/>
         </StackPanel>
     </Grid>

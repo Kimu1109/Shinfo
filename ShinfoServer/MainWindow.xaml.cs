@@ -1,6 +1,7 @@
 ﻿using ShinfoServer.Dialog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,36 +25,21 @@ namespace ShinfoServer
         public MainWindow()
         {
             InitializeComponent();
-            Data.tcp = new TCP(2001);
+            Data.InitData();
             Data.tcp.Get += ProcessOfGeneral;
 
             GroupAndUserTree.ItemsSource = Data.Groups;
+            UsersList.ItemsSource = Data.Users;
         }
         private void ProcessOfGeneral(object sender, TCP.TCPEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void GroupAndUserTree_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
-            if (SelectedItem != null)
-            {
-                if (SelectedItem.IsGroup)
-                {
-
-                }
-                else
-                {
-
-                }
-            }
-        }
-
         private void AddGroup_Click(object sender, RoutedEventArgs e)
         {
             var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
-            if(SelectedItem == null)
+            if (SelectedItem == null)
             {
                 new AddGroup() { Group = null }.Show();
             }
@@ -65,7 +51,7 @@ namespace ShinfoServer
                 }
                 else
                 {
-                    new AddGroup() { Group = (SelectedItem as UserData).Parent }.Show();
+                    MessageBox.Show("Please select group.");
                 }
             }
         }
@@ -73,20 +59,61 @@ namespace ShinfoServer
         private void AddUser_Click(object sender, RoutedEventArgs e)
         {
             var SelectedItem = GroupAndUserTree.SelectedItem as UserAndGroupTree;
-            if(SelectedItem == null)
+            if (SelectedItem == null)
             {
-                MessageBox.Show("ユーザーまたは、グループを選択してください。");
+                MessageBox.Show("Please select group.");
             }
             else
             {
-                if (SelectedItem.IsGroup)
+                var selectUser = new SelectUser();
+                if (selectUser.ShowDialog() == true)
                 {
-                    
+                    if (SelectedItem.IsGroup)
+                    {
+                        (SelectedItem as GroupData).Users.Add(selectUser.SelectedUser);
+                        (SelectedItem as GroupData).Nodes = null;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please select group.");
+                    }
                 }
-                else
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {//Add User
+            new AddUserAtUsers().Show();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {//Remove User
+            var selectUser = UsersList.SelectedItem as UserData;
+            if(selectUser != null)
+            {
+                var msgResult = MessageBox.Show($"Are you sure you want to delete this user(Name:{selectUser.Name}, ID:{selectUser.ID})?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if(msgResult == MessageBoxResult.OK)
                 {
-                    
-                }
+                    Data.Users.Remove(selectUser);
+                }                
+            }
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {//Edit User
+            var selectUser = UsersList.SelectedItem as UserData;
+            if(selectUser != null)
+            {
+                new EditUser(selectUser).Show();
+            }
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {//Data -> Save
+            File.WriteAllText(Data.AppPath + "\\data\\Group.xml", GroupData.ToXml(Data.Groups.ToArray()));
+            foreach(var user in Data.Users)
+            {
+                File.WriteAllText(Data.AppPath + "\\data\\User\\" + user.ID + ".xml", user.ToXml());
             }
         }
     }

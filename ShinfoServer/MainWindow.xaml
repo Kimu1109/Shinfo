@@ -5,26 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShinfoServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1920">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Grid.Column="0" ItemsSource="{Binding Users}">
+        <Menu Grid.Row="0" Grid.ColumnSpan="5" FontSize="17">
+            <MenuItem Header="Data">
+                <MenuItem Click="MenuItem_Click_3" Header="Save"/>
+            </MenuItem>
+        </Menu>
+
+        <ListView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Users}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="名前" Width="200" DisplayMemberBinding="{Binding username}"/>
-                    <GridViewColumn Header="ユーザーID" Width="150" DisplayMemberBinding="{Binding userID}"/>
-                    <GridViewColumn Header="権限" Width="75" DisplayMemberBinding="{Binding userLevel}"/>
-                    <GridViewColumn Header="接続" Width="75" DisplayMemberBinding="{Binding connect}"/>
+                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding username}"/>
+                    <GridViewColumn Header="ID" Width="150" DisplayMemberBinding="{Binding userID}"/>
+                    <GridViewColumn Header="Level" Width="75" DisplayMemberBinding="{Binding userLevel}"/>
+                    <GridViewColumn Header="Time to connect" Width="120" DisplayMemberBinding="{Binding connect}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch"/>
-        <TreeView Name="GroupAndUserTree" Grid.Column="2" ContextMenuOpening="GroupAndUserTree_ContextMenuOpening">
+        <GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="3" HorizontalAlignment="Stretch"/>
+        <TreeView Name="GroupAndUserTree" Grid.Column="2" Grid.Row="1">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType= "local:UserAndGroupTree" ItemsSource="{Binding Nodes}">
                     <StackPanel Orientation="Horizontal">
@@ -35,13 +47,30 @@
             </TreeView.ItemTemplate>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Name="AddGroup" Click="AddGroup_Click" Header="グループを追加"/>
-                    <MenuItem Name="RemoveGroup" Header="グループを削除"/>
+                    <MenuItem Name="AddGroup" Click="AddGroup_Click" Header="Add Group"/>
+                    <MenuItem Name="RemoveGroup" Header="Remove Group"/>
                     <Separator/>
-                    <MenuItem Name="AddUser" Click="AddUser_Click" Header="ユーザーを追加"/>
-                    <MenuItem Name="RemoveUser" Header="ユーザーを削除"/>
+                    <MenuItem Name="AddUser" Click="AddUser_Click" Header="Add User"/>
+                    <MenuItem Name="RemoveUser" Header="Remove User"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
+        <GridSplitter Grid.Column="3" Grid.RowSpan="2" Width="3" HorizontalAlignment="Stretch"/>
+        <ListView Name="UsersList" Grid.Column="4" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="125" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="ID" Width="100" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Header="Level" Width="75" DisplayMemberBinding="{Binding Level}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="MenuItem_Click" Header="CREATE new User"/>
+                    <MenuItem Click="MenuItem_Click_1" Header="DELETE select User"/>
+                    <MenuItem Click="MenuItem_Click_2" Header="EDIT select User information"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
     </Grid>
 </Window>

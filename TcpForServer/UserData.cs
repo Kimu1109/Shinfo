@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 
-namespace ShinfoServer
+namespace TcpForServer
 {
     public partial class UserData : INotifyPropertyChanged, UserAndGroupTree
     {//一般
@@ -38,7 +36,7 @@ namespace ShinfoServer
             get => _password;
             set
             {
-                _password = value; 
+                _password = value;
                 RaisePropertyChanged();
             }
         }

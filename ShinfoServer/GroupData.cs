@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ShinfoServer
 {
@@ -63,10 +68,93 @@ namespace ShinfoServer
                 RaisePropertyChanged();
             }
         }
+        public static string ToXml(GroupData[] groups)
+        {
+            var st = new StringBuilder(Data.XmlHeader);
+            st.AppendLine("<Root>");
+            foreach(var g in groups) st.Append(g._toXml(1));
+            st.AppendLine("</Root>");
+            return st.ToString();
+        }
+        private string _toXml(int tab = 0)
+        {
+            string tabs = "";
+            for (int i = 0; i < tab; i++) tabs += "\t";
 
+            var st = new StringBuilder();
+            st.AppendLine($"{tabs}<Group Name=\"{Name}\" ID=\"{ID}\" Description=\"{Description}\" Level=\"{(int)Level}\">");
+            foreach(var child in Children)
+            {
+                st.Append(child._toXml(tab + 1));
+            }
+            foreach(var user in Users)
+            {
+                st.AppendLine(tabs + "\t<User>" + user.ID + "</User>");
+            }
+            st.AppendLine($"{tabs}</Group>");
+            return st.ToString();
+        }
+        public static GroupData[] ParseFromFile(string file)
+        {
+            var xml = XElement.Load(file);
+            var groups = new List<GroupData>();
+
+            foreach(var group in xml.Elements("Group"))
+            {
+                groups.Add(_parseFromElement(group));
+            }
+            return groups.ToArray();
+        }
+        public static GroupData _parseFromElement(XElement element)
+        {
+            var group = new GroupData();
+
+            group.Name = element.Attribute("Name").Value;
+            group.ID = element.Attribute("ID").Value;
+            group.Description = element.Attribute("Description").Value;
+            group.Level = (UserData.UserLevel)int.Parse(element.Attribute("Level").Value);
+
+            foreach(var child in element.Elements("Group"))
+            {
+                group.Children.Add(_parseFromElement(child));
+            }
+            foreach(var user in element.Elements("User"))
+            {
+                foreach(var du in Data.Users)
+                {
+                    if(user.Value == du.ID)
+                    {
+                        group.Users.Add(du);
+                        break;
+                    }
+                }
+            }
+
+            return group;
+        }
         public GroupData Parent { get; set; }
-        public ObservableCollection<GroupData> Children { get; set; } = new ObservableCollection<GroupData>();
-        public ObservableCollection<UserData> Users { get; set; } = new ObservableCollection<UserData>();
+        private ObservableCollection<GroupData> _children = new ObservableCollection<GroupData>();
+        public ObservableCollection<GroupData> Children
+        {
+            get => _children;
+            set
+            {
+                _children = value;
+                RaisePropertyChanged();
+                Nodes = null;
+            }
+        }
+        private ObservableCollection<UserData> _users = new ObservableCollection<UserData>();
+        public ObservableCollection<UserData> Users
+        {
+            get => _users;
+            set
+            {
+                _users = value;
+                RaisePropertyChanged();
+                Nodes = null;
+            }
+        }
         public ObservableCollection<UserAndGroupTree> Nodes 
         { 
             get

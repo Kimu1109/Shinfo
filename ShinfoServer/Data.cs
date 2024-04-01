@@ -17,6 +17,11 @@ namespace ShinfoServer
         internal static BitmapImage GroupIcon = new BitmapImage(new Uri(AppPath + "\\img\\Home.png"));
         internal static BitmapImage UserIcon = new BitmapImage(new Uri(AppPath + "\\img\\Account.png"));
 
+        internal const string XmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        internal const string Tab1 = "\t";
+        internal const string Tab2 = "\t\t";
+        internal const string Tab3 = "\t\t\t";
+
         internal static TCP tcp;
         internal static string AppPath
         {
@@ -30,7 +35,13 @@ namespace ShinfoServer
 
         internal static void InitData()
         {
+            tcp = new TCP(2001);
 
+            foreach (var file in Directory.GetFiles(AppPath + "\\data\\User"))
+            {
+                Users.Add(UserData.ParseFromFile(file));
+            }
+            if (File.Exists(AppPath + "\\data\\Group.xml")) Groups = new ObservableCollection<GroupData>(GroupData.ParseFromFile(AppPath + "\\data\\Group.xml"));
         }
     }
 }

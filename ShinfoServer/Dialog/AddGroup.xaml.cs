@@ -53,6 +53,7 @@ namespace ShinfoServer.Dialog
                     Description = Description.Text,
                     Level = (UserData.UserLevel)Enum.Parse(typeof(UserData.UserLevel), LevelCombo.Text)
                 });
+                Group.Nodes = null;
             }
             this.Close();
         }

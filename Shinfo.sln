@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShinfoServer", "ShinfoServe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat", "Chat\Chat.csproj", "{DD57ECCF-E75D-4AAF-9E6D-B4E44F33722C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP", "TCP\TCP.csproj", "{92C1803E-8A52-46AD-946E-0497F5D51F51}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{DD57ECCF-E75D-4AAF-9E6D-B4E44F33722C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD57ECCF-E75D-4AAF-9E6D-B4E44F33722C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD57ECCF-E75D-4AAF-9E6D-B4E44F33722C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92C1803E-8A52-46AD-946E-0497F5D51F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92C1803E-8A52-46AD-946E-0497F5D51F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92C1803E-8A52-46AD-946E-0497F5D51F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92C1803E-8A52-46AD-946E-0497F5D51F51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

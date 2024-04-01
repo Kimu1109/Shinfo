@@ -19,7 +19,6 @@ namespace ShinfoServer.Dialog
     /// </summary>
     public partial class AddUserAtUsers : Window
     {
-        public GroupData Group { get; set; }
         public AddUserAtUsers()
         {
             InitializeComponent();
@@ -34,18 +33,19 @@ namespace ShinfoServer.Dialog
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {//OK
-            Group.Users.Add(new UserData()
+            Data.Users.Add(new UserData()
             {
                 Name = NameBox.Text,
                 password = PasswordBox.Text,
-                userID = IdBox.Text,
-                Level = (UserData.UserLevel)Enum.Parse(typeof(UserData.UserLevel), LevelCombo.SelectedItem as string)
+                ID = IdBox.Text,
+                Level = (UserData.UserLevel)Enum.Parse(typeof(UserData.UserLevel), LevelCombo.Text)
             });
+            this.Close();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {//キャンセル
-
+            this.Close();
         }
     }
 }

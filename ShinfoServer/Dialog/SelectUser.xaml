@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShinfoServer.Dialog"
         mc:Ignorable="d"
-        Title="SelectUser" Height="450" Width="800">
-    <Grid>
-        
+        Title="SelectUser" Height="450" Width="800" FontSize="17">
+    <Grid Margin="5">
+        <StackPanel>
+            <TextBlock Text="Select user" FontSize="28"/>
+            <TextBlock Text="Users"/>
+            <ListView Name="UserList" Height="300">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding userID}" Width="150"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancel" Margin="5" Background="LightYellow" Click="Button_Click_1"/>
+                <Button Content="OK" Margin="5" Background="GreenYellow" Click="Button_Click"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

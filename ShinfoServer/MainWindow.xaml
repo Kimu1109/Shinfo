@@ -25,13 +25,13 @@
             </MenuItem>
         </Menu>
 
-        <ListView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Users}">
+        <ListView Name="ClientList" Grid.Column="0" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding username}"/>
-                    <GridViewColumn Header="ID" Width="150" DisplayMemberBinding="{Binding userID}"/>
-                    <GridViewColumn Header="Level" Width="75" DisplayMemberBinding="{Binding userLevel}"/>
-                    <GridViewColumn Header="Time to connect" Width="120" DisplayMemberBinding="{Binding connect}"/>
+                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding user.Name}"/>
+                    <GridViewColumn Header="ID" Width="150" DisplayMemberBinding="{Binding user.ID}"/>
+                    <GridViewColumn Header="Level" Width="75" DisplayMemberBinding="{Binding user.Level}"/>
+                    <GridViewColumn Header="Time to connect" Width="120" DisplayMemberBinding="{Binding user.connect}"/>
                 </GridView>
             </ListView.View>
         </ListView>

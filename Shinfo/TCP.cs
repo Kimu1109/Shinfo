@@ -26,8 +26,8 @@ namespace Shinfo
         public string ip;
         public int port;
 
-        public string username;
         public string password;
+        public string ID;
 
         private const int TIME_OUT = 10;
 
@@ -38,15 +38,15 @@ namespace Shinfo
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="port"></param>
-        /// <param name="username"></param>
         /// <param name="password"></param>
-        public TCP(string ip, int port, string username, string password)
+        /// <param name="ID"></param>
+        public TCP(string ip, int port, string password, string ID)
         {
             this.ip = ip;
             this.port = port;
 
-            this.username = username;
             this.password = password;
+            this.ID = ID;
 
             client = new TcpClient(ip, port);
             client.SendTimeout = TIME_OUT;
@@ -62,8 +62,8 @@ namespace Shinfo
             this.ip = source.ip;
             this.port = source.port;
 
-            this.username = source.username;
             this.password = source.password;
+            this.ID = source.ID;
 
             client = new TcpClient(ip, port);
             client.SendTimeout = TIME_OUT;
@@ -77,7 +77,7 @@ namespace Shinfo
         /// <returns></returns>
         public bool Login()
         {
-            Send("login/" + username + "/" + password);
+            Send("login/" + ID + "/" + password);
             string log = Get();
             var logArr = log.Split('/');
             switch (logArr[0])
@@ -237,7 +237,7 @@ namespace Shinfo
         /// <returns></returns>
         public bool ComLogin()
         {
-            Send("com-login/" + username + "/" + password);
+            Send("com-login/" + password + "/" + ID);
             string log = Get();
             switch (log)
             {
@@ -257,7 +257,7 @@ namespace Shinfo
         /// <returns></returns>
         public bool Upload(string fileName)
         {
-            var com = new TCP(ip, port, username, password);
+            var com = new TCP(ip, port, password, ID);
             com.ComLogin();
             bool ret = com.SendFile(System.IO.File.ReadAllBytes(fileName)).Result;
             com.Close();
@@ -272,7 +272,7 @@ namespace Shinfo
         /// <returns></returns>
         public async Task Download(string downloadPath)
         {
-            var com = new TCP(ip, port, username, password);
+            var com = new TCP(ip, port, password, ID);
             com.ComLogin();
             com.Send("file/read/" + downloadPath.ToStr());
             var arr = com.Get().Split('/');

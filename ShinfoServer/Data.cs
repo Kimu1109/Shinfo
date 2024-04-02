@@ -36,6 +36,8 @@ namespace ShinfoServer
         internal static void InitData()
         {
             tcp = new TCP(2001);
+            tcp.ListenStart();
+            tcp.BackGroundProcess();
 
             foreach (var file in Directory.GetFiles(AppPath + "\\data\\User"))
             {

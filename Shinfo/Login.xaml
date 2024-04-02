@@ -1,0 +1,65 @@
+﻿<Window x:Class="Shinfo.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shinfo"
+        mc:Ignorable="d"
+        Title="Login"
+        Width="500"
+        Height="450"
+        FontSize="17">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Top">
+
+            <TextBlock Text="Shinfoへようこそ!"
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                   HorizontalAlignment="Center"
+                   Margin="10"/>
+
+            <Label Content="Shinfoアカウントに接続する。" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Height="35" Grid.Column="0" Content="サーバーIP:" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+            <TextBox Height="35" Name="TextBox_IP" Grid.Column="1" Width="200" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+            <Label Height="35" Grid.Column="0" Content="アクセスPort:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Height="35" Name="TextBox_Port" Grid.Column="1" Width="200" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <Label Height="35" Grid.Column="0" Content="AESキー:" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <TextBox Height="35" Name="TextBox_AESKey" Grid.Column="1" Width="200" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Height="35" Grid.Column="0" Content="ユーザーID:" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+            <TextBox Height="35" Name="TextBox_UserID" Grid.Column="1" Width="200" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+
+            <Label Grid.Column="0" Content="パスワード:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Name="TextBox_Password" Grid.Column="1" Width="200" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Content="キャンセル" Click="Cancel_Click" Style="{StaticResource MaterialDesignPaperDarkButton}" VerticalAlignment="Bottom"/>
+                <Button Content="OK" Click="OK_Click" Margin="10,0,0,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" VerticalAlignment="Bottom"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>

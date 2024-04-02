@@ -28,12 +28,35 @@ namespace ShinfoServer
             Data.InitData();
             Data.tcp.Get += ProcessOfGeneral;
 
+            ClientList.ItemsSource = Data.tcp.clients;
             GroupAndUserTree.ItemsSource = Data.Groups;
             UsersList.ItemsSource = Data.Users;
         }
         private void ProcessOfGeneral(object sender, TCP.TCPEventArgs e)
         {
-            throw new NotImplementedException();
+            string msg = Encoding.UTF8.GetString(e.Message);
+            string[] arr = msg.Split('/');
+
+            switch(arr[0])
+            {
+                //args -> 1:ID, 2:Password
+                case "login":
+                    string login_id = arr[1];
+                    string login_password = arr[2];
+
+                    foreach(var user in Data.Users)
+                    {
+                        if(user.ID == login_id && user.password == login_password)
+                        {
+                            e.ClientData.user = user;
+                            Process.Send(e.ClientData, "success");
+                            return;
+                        }
+                    }
+                    Process.Send(e.ClientData, "failed");
+
+                    break;
+            }
         }
 
         private void AddGroup_Click(object sender, RoutedEventArgs e)

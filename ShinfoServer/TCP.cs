@@ -8,6 +8,9 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ShinfoServer
 {
@@ -23,7 +26,7 @@ namespace ShinfoServer
         public TcpListener server;
         public int port;
 
-        public List<Client> clients;
+        public ObservableCollection<Client> clients;
 
         /// <summary>
         /// サーバーを起動します。
@@ -33,7 +36,7 @@ namespace ShinfoServer
         {
             this.port = port;
 
-            this.clients = new List<Client>();
+            this.clients = new ObservableCollection<Client>();
 
             server = new TcpListener(IPAddress.Any, port);
         }
@@ -168,10 +171,35 @@ namespace ShinfoServer
             public TcpClient Client;
         }
     }
-    public class Client
-    {
-        public TcpClient client;
-        public UserData user;
+    public class Client : INotifyPropertyChanged
+    {        
+        // INotifyPropertyChanged impl --->
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        // <---
+
+        private TcpClient _client;
+        public TcpClient client
+        {
+            get => _client;
+            set
+            {
+                _client = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private UserData _user;
+        public UserData user
+        {
+            get => _user;
+            set
+            {
+                _user = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool isRemove;
     }

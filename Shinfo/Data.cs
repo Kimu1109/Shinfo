@@ -18,17 +18,37 @@ namespace Shinfo
             }
         }
         internal static IpcServerChannel ipc;
-        internal static UserInfo userInfo;
+        internal static IPC.UserInfo userInfo;
     }
-    internal class UserInfo : MarshalByRefObject
+}
+namespace IPC
+{
+    public class UserInfo : MarshalByRefObject
     {
-        internal string IP { get; set; }
-        internal int Port { get; set; }
-        internal string AES { get; set; }
+        public string IP { get; set; }
+        public int Port { get; set; }
+        public string AES { get; set; }
 
-        internal string ID { get; set; }
-        internal string Password { get; set; }
+        public string ID { get; set; }
+        public string Password { get; set; }
 
-        internal List<(string Name, string ID)> Users { get; set; } = new List<(string Name, string ID)>();
+        public List<User> Users { get; set; } = new List<User>();
+        public List<Group> Groups { get; set; } = new List<Group>();
+
+        public class User : MarshalByRefObject
+        {
+            public string Name { get; set; }
+            public string ID { get; set; }
+        }
+        public class Group : MarshalByRefObject
+        {
+            public string Name { get; set; }
+            public string ID { get; set; }
+            public string Description { get; set; }
+        }
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

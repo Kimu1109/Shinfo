@@ -15,7 +15,7 @@ using System.Xml.Linq;
 
 namespace ShinfoServer
 {
-    public class GroupData : INotifyPropertyChanged, UserAndGroupTree
+    public class GroupData : MarshalByRefObject, INotifyPropertyChanged, UserAndGroupTree
     {
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
@@ -125,6 +125,7 @@ namespace ShinfoServer
                     if(user.Value == du.ID)
                     {
                         group.Users.Add(du);
+                        du.Groups.Add(group);
                         break;
                     }
                 }

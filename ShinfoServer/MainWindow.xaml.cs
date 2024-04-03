@@ -1,4 +1,5 @@
-﻿using ShinfoServer.Dialog;
+﻿using Microsoft.Win32;
+using ShinfoServer.Dialog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,9 +38,34 @@ namespace ShinfoServer
             string msg = Encoding.UTF8.GetString(e.Message);
             string[] arr = msg.Split('/');
 
-            switch(arr[0])
+            if (e.ClientData.user.IsSendMode)
             {
+                Console.WriteLine($"GetRequest:{msg}");
+
+                if (!e.ClientData.user.IsStart)
+                {
+                    e.ClientData.user.IsStart = true;
+                    Console.WriteLine("set is start → true");
+                }
+                else
+                {
+                    e.ClientData.user.CatchRequest = msg;
+                    e.ClientData.user.IsCatchBool = true;
+                }
+                return;
+            }
+
+            switch (arr[0])
+            {
+                case "QFPDST":
+                    Console.WriteLine($"QFPDST Version→{arr[1]}");
+                    e.ClientData.user.AllSize = int.Parse(arr[2]);
+                    e.ClientData.user.IsGetMode = true;
+                    Process.Send(e.ClientData, "QFPLET");
+                    return;
                 //args -> 1:ID, 2:Password
+                //description:
+                //ログインを行います。ユーザーの情報に変更を加えることができます。
                 case "login":
                     string login_id = arr[1];
                     string login_password = arr[2];
@@ -49,11 +75,70 @@ namespace ShinfoServer
                         if(user.ID == login_id && user.password == login_password)
                         {
                             e.ClientData.user = user;
+                            e.ClientData.user.connect = DateTime.Now;
+                            e.ClientData.user.IsLogin = true;
                             Process.Send(e.ClientData, "success");
                             return;
                         }
                     }
                     Process.Send(e.ClientData, "failed");
+
+                    break;
+                //args -> 1:ID, 2;Password
+                //description:
+                //ログインを行いますが、ユーザーの情報に変更を加えることはできません。
+                case "login-sub":
+                    string login_sub_id = arr[1];
+                    string login_sub_password = arr[2];
+
+                    foreach (var user in Data.Users)
+                    {
+                        if (user.ID == login_sub_id && user.password == login_sub_password)
+                        {
+                            e.ClientData.user = user.Clone();
+                            e.ClientData.user.connect = DateTime.Now;
+                            e.ClientData.user.IsLogin = true;
+                            Process.Send(e.ClientData, "success");
+                            return;
+                        }
+                    }
+                    Process.Send(e.ClientData, "failed");
+
+                    break;
+                //description:
+                //ユーザー情報を取得します。
+                case "download-user-info":
+
+                    if (e.ClientData.user.IsLogin)
+                    {
+                        var InfoXml = new StringBuilder(Data.XmlHeader);
+
+                        InfoXml.AppendLine("<Root>");
+
+                        foreach (var g in e.ClientData.user.Groups)
+                        {
+                            InfoXml.AppendLine(Data.Tab1 + "<Group>");
+
+                            InfoXml.AppendLine(Data.Tab2 + "<Name>" + g.Name + "</Name>");
+                            InfoXml.AppendLine(Data.Tab2 + "<ID>" + g.ID + "</ID>");
+                            InfoXml.AppendLine(Data.Tab2 + "<Description>" + g.Description + "</Description>");
+
+                            InfoXml.AppendLine(Data.Tab1 + "</Group>");
+                            foreach(var u in g.Users)
+                            {
+                                InfoXml.AppendLine(Data.Tab1 + "<User>");
+
+                                InfoXml.AppendLine(Data.Tab2 + "<Name>" + u.Name + "</Name>");
+                                InfoXml.AppendLine(Data.Tab2 + "<ID>" + u.ID + "</ID>");
+
+                                InfoXml.AppendLine(Data.Tab1 + "</User>");
+                            }
+                        }
+
+                        InfoXml.AppendLine("</Root>");
+
+                        Process.SendFile(e.ClientData, Encoding.UTF8.GetBytes(InfoXml.ToString()));
+                    }
 
                     break;
             }
@@ -95,6 +180,7 @@ namespace ShinfoServer
                     {
                         (SelectedItem as GroupData).Users.Add(selectUser.SelectedUser);
                         (SelectedItem as GroupData).Nodes = null;
+                        selectUser.SelectedUser.Groups.Add(SelectedItem as GroupData);
                     }
                     else
                     {
@@ -137,6 +223,46 @@ namespace ShinfoServer
             foreach(var user in Data.Users)
             {
                 File.WriteAllText(Data.AppPath + "\\data\\User\\" + user.ID + ".xml", user.ToXml());
+            }
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {//file -> create file
+            var sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Data.AppPath + "\\file";
+            if (sfd.ShowDialog() == true)
+            {
+                Process.FileControl.Create(sfd.FileName.Replace(Data.AppPath + "\\file\\", ""), "Created by server.", Data.SystemAdminUser);
+            }
+        }
+
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {//file -> create directory
+            var sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Data.AppPath + "\\file";
+            if (sfd.ShowDialog() == true)
+            {
+                Process.DirectoryControl.Create(sfd.FileName.Replace(Data.AppPath + "\\file\\", ""), "Created by server.", Data.SystemAdminUser);
+            }
+        }
+
+        private void MenuItem_Click_6(object sender, RoutedEventArgs e)
+        {//file -> remove file
+            var ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Data.AppPath + "\\file";
+            if(ofd.ShowDialog() == true)
+            {
+                Process.FileControl.Delete(ofd.FileName.Replace(Data.AppPath + "\\file\\", ""), Data.SystemAdminUser);
+            }
+        }
+
+        private void MenuItem_Click_7(object sender, RoutedEventArgs e)
+        {//file -> remove directory
+            var ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Data.AppPath + "\\file";
+            if (ofd.ShowDialog() == true)
+            {
+                Process.DirectoryControl.Delete(ofd.FileName.Replace(Data.AppPath + "\\file\\", ""), Data.SystemAdminUser);
             }
         }
     }

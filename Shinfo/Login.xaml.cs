@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,10 +44,9 @@ namespace Shinfo
                 TextBox_Password.Text = user.Element("Password").Value;
             }
         }
-
-        private void OK_Click(object sender, RoutedEventArgs e)
+        private async void OK_Click(object sender, RoutedEventArgs e)
         {
-            Data.userInfo = new UserInfo();
+            Data.userInfo = new IPC.UserInfo();
             Data.userInfo.IP = TextBox_IP.Text;
             Data.userInfo.Port = int.Parse(TextBox_Port.Text);
             Data.userInfo.AES = TextBox_AESKey.Text;
@@ -54,20 +54,39 @@ namespace Shinfo
             Data.userInfo.ID = TextBox_UserID.Text;
             Data.userInfo.Password = TextBox_Password.Text;
 
-            var tcp = new TCP(Data.userInfo.IP, Data.userInfo.Port, Data.userInfo.Password, Data.userInfo.ID);
-            if (tcp.Login())
+            using(var tcp = new TCP(Data.userInfo.IP, Data.userInfo.Port, Data.userInfo.Password, Data.userInfo.ID))
             {
-                Data.ipc = new System.Runtime.Remoting.Channels.Ipc.IpcServerChannel("Shinfo");
-                ChannelServices.RegisterChannel(Data.ipc, true);
+                if (tcp.Login())
+                {
+                    tcp.Send("download-user-info");
+                    var xml = XElement.Parse(Encoding.UTF8.GetString(await tcp.Download()));
 
-                RemotingServices.Marshal(Data.userInfo, "UserInfo", typeof(UserInfo));
+                    foreach(var group in xml.Elements("Group"))
+                    {
+                        var groupObj = new IPC.UserInfo.Group();
+                        groupObj.Name = group.Element("Name").Value;
+                        groupObj.ID = group.Element("ID").Value;
+                        groupObj.Description = group.Element("Description").Value;
+                    }
+                    foreach(var user in xml.Elements("User"))
+                    {
+                        var userObj = new IPC.UserInfo.User();
+                        userObj.Name = user.Element("Name").Value;
+                        userObj.ID = user.Element("ID").Value;
+                    }
 
-                new MainWindow().Show();
-                this.Close();
-            }
-            else
-            {
-                Process.ShowErrorMessageBox("ログインできませんでした。", "IPまたはポートまたはAESキーまたはIDまたはパスワードが間違っている可能性があります :)");
+                    Data.ipc = new System.Runtime.Remoting.Channels.Ipc.IpcServerChannel("Shinfo");
+                    ChannelServices.RegisterChannel(Data.ipc, true);
+
+                    RemotingServices.Marshal(Data.userInfo, "UserInfo", typeof(IPC.UserInfo));
+
+                    new MainWindow().Show();
+                    this.Close();
+                }
+                else
+                {
+                    Process.ShowErrorMessageBox("ログインできませんでした。", "IPまたはポートまたはAESキーまたはIDまたはパスワードが間違っている可能性があります :)");
+                }
             }
         }
 

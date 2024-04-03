@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Net.Sockets;
+using System.Threading;
+using System.IO;
+using System.Diagnostics;
+using IPC;
 
-namespace Shinfo
+namespace Chat
 {
     internal partial class TCP : IDisposable
     {
@@ -264,38 +264,7 @@ namespace Shinfo
             return ret;
 
         }
-        /// <summary>
-        /// ファイルをダウンロードします。
-        /// これらの処理はGet_Process関数を使用します。
-        /// </summary>
-        /// <param name="downloadPath"></param>
-        /// <returns></returns>
-        public async Task Download(string downloadPath)
-        {
-            var com = new TCP(ip, port, password, ID);
-            com.ComLogin();
-            com.Send("file/read/" + downloadPath.ToStr());
-            var arr = com.Get().Split('/');
-            if (arr[0] == "file" && arr[1] == "read")
-            {
-                switch (arr[2])
-                {
-                    case "success":
-                        Process.CreateFile(downloadPath);
-                        using (var fs = new FileStream(Data.AppPath + "\\data\\file\\" + downloadPath, FileMode.Create, FileAccess.Write))
-                        {
-                            var bytes = await com.Download(true);
-                            fs.Write(bytes, 0, bytes.Length);
-                        }
-                        break;
-                    case "failed":
-                        MessageBox.Show("ダウンロードに失敗しました。\n" + arr[3]);
-                        break;
-                }
-            }
-            else MessageBox.Show("ダウンロードに失敗しました。\nサーバーからの応答がありません。");
-        }
-        public async Task<byte[]> Download(bool IsShowDialog = false)
+        public async Task<byte[]> Download()
         {
             ulong _AllSize;
             byte[] getBytes = null;
@@ -313,17 +282,8 @@ namespace Shinfo
             }
             Send("QFPLET");
 
-            var fileCom = new FileCom();
-            if (IsShowDialog)
-            {
-                fileCom.ProgressMax = _AllSize;
-                fileCom.Show();
-            }
-
             var task = Task.Run(() =>
             {
-                var stopWatch = new Stopwatch();
-                stopWatch.Start();
 
                 while (true)
                 {
@@ -383,42 +343,14 @@ namespace Shinfo
                                 getBytes = getBytes.Decompress();
                                 Console.WriteLine("FINISH-GET!!!!!!!!!!!!!!!!!!!!!");
 
-                                stopWatch.Stop();
-
-                                if (IsShowDialog)
-                                {
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        fileCom.Close();
-                                    });
-                                }
-
                                 return getBytes;
                             }
                             else
                             {
                                 Send("Cancel");
 
-                                stopWatch.Stop();
-
-                                if (IsShowDialog)
-                                {
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        fileCom.Close();
-                                    });
-                                }
-
                                 throw new Exception("ダウンロードエラー\n正しくダウンロードできませんでした。");
                             }
-                    }
-
-                    if (IsShowDialog)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            fileCom.SetData(getBytes.Length, (ulong)getBytes.Length * 100Lu / _AllSize + "%完了", ((ulong)((double)getBytes.Length / ((double)stopWatch.ElapsedMilliseconds / 1000D))).SizeToString() + "/s", "残り" + ((ulong)(_AllSize - (ulong)getBytes.Length)).SizeToString());
-                        });
                     }
 
                 SKIP:;
@@ -433,7 +365,7 @@ namespace Shinfo
         /// </summary>
         /// <param name="byteArr"></param>
         /// <returns></returns>
-        public async Task<bool> SendFile(byte[] byteArr, bool IsShowDialog = true)
+        public async Task<bool> SendFile(byte[] byteArr)
         {
             var start = DateTime.Now;
 
@@ -450,15 +382,6 @@ namespace Shinfo
             const int CHUNK_FOOTER = 6;
 
             byteArr = byteArr.Compress();
-
-            FileCom filecom = null;
-            if (IsShowDialog)
-            {
-                filecom = new FileCom();
-                filecom.ProgressMax = byteArr.Length;
-                filecom.Title = "アップロード";
-                filecom.Show();
-            }
 
             var task = Task.Run(() =>
             {
@@ -536,26 +459,10 @@ namespace Shinfo
                     BytesPerMillisecond_Buf = chunkSize / (Stopwatch.ElapsedMilliseconds / 1000d);
                     if (BytesPerMillisecond == -1) BytesPerMillisecond = BytesPerMillisecond_Buf;
                     CHUNK_DATA_SIZE = Math.Max(1024, CHUNK_DATA_SIZE + (int)(BytesPerMillisecond - BytesPerMillisecond_Buf) + 256);
-
-                    if (IsShowDialog)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            filecom.SetData(count, count * 100 / byteArr.Length + "%完了", ((ulong)BytesPerMillisecond_Buf).SizeToString() + "/s", "残り" + ((ulong)(byteArr.Length - count)).SizeToString());
-                        });
-                    }
                 }
 
                 Console.WriteLine($"FINISHED → {DateTime.Now - start}");
                 Console.WriteLine($"送信速度:{byteArr.Length / (DateTime.Now - start).TotalSeconds}");
-
-                if (IsShowDialog)
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        filecom.Close();
-                    });
-                }
 
                 return true;
             });
@@ -577,4 +484,5 @@ namespace Shinfo
             Console.WriteLine("バイトを送ります! " + bytes.Length);
         }
     }
+
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace ShinfoServer
 {
@@ -121,6 +122,8 @@ namespace ShinfoServer
                     {
                         //受信サイズが0のとき切断とみなし クライアントの削除
                         //リストから削除する
+                        client_data.user.IsLogin = false;
+                        client_data.user.connect = DateTime.MinValue;
                         clients.Remove(client_data);
                         //Clientを閉じる
                         client.Close();
@@ -158,7 +161,12 @@ namespace ShinfoServer
                         if (c.isRemove) cl.Add(c);
                         else if (c.user.Name == "NULL" && c.user.password == "NULL" && DateTime.Now - c.user.connect >= oneMinute) cl.Add(c);
                     }
-                    foreach (var c in cl) clients.Remove(c);
+                    foreach (var c in cl)
+                    {
+                        c.user.connect = DateTime.MinValue;
+                        c.user.IsLogin = false;
+                        clients.Remove(c);
+                    }
 
                     Thread.Sleep(1000);
                 }
@@ -171,7 +179,7 @@ namespace ShinfoServer
             public TcpClient Client;
         }
     }
-    public class Client : INotifyPropertyChanged
+    public class Client : MarshalByRefObject, INotifyPropertyChanged
     {        
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
@@ -201,6 +209,6 @@ namespace ShinfoServer
             }
         }
 
-        public bool isRemove;
+        public bool isRemove = false;
     }
 }

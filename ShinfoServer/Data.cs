@@ -6,11 +6,17 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
+using System.Runtime.Remoting.Channels.Ipc;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting;
 
 namespace ShinfoServer
 {
     internal static class Data
     {
+        internal static IpcServerChannel Channel;
+        
+
         internal static ObservableCollection<UserData> Users = new ObservableCollection<UserData>();
         internal static ObservableCollection<GroupData> Groups = new ObservableCollection<GroupData>();
 
@@ -38,6 +44,10 @@ namespace ShinfoServer
             tcp = new TCP(2001);
             tcp.ListenStart();
             tcp.BackGroundProcess();
+
+            Channel = new IpcServerChannel("ShinfoServer");
+            ChannelServices.RegisterChannel(Channel, true);
+            RemotingServices.Marshal(tcp.clients, "TestObj", typeof(ObservableCollection<Client>));
 
             foreach (var file in Directory.GetFiles(AppPath + "\\data\\User"))
             {

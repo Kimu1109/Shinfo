@@ -23,6 +23,13 @@
             <MenuItem Header="Data">
                 <MenuItem Click="MenuItem_Click_3" Header="Save"/>
             </MenuItem>
+            <MenuItem Header="File">
+                <MenuItem Click="MenuItem_Click_4" Header="Create File"/>
+                <MenuItem Click="MenuItem_Click_5" Header="Create Directory"/>
+                <Separator/>
+                <MenuItem Click="MenuItem_Click_6" Header="Delete File"/>
+                <MenuItem Click="MenuItem_Click_7" Header="Delete Directory"/>
+            </MenuItem>
         </Menu>
 
         <ListView Name="ClientList" Grid.Column="0" Grid.Row="1">

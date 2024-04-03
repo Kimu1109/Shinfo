@@ -220,7 +220,10 @@ namespace ShinfoServer
                 }
 
                 Console.WriteLine("データの転送完了!");
-                client_data.isRemove = true;
+                client_data.user.IsStart = false;
+                client_data.user.IsCatchBool = false;
+                client_data.user.CatchRequest = "";
+                client_data.user.IsSendMode = false;
             });
         }
         public static void SendBytes(Client client_data, byte[] bytes)

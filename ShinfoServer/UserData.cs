@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace ShinfoServer
 {
-    public partial class UserData : INotifyPropertyChanged, UserAndGroupTree
+    public partial class UserData : MarshalByRefObject, INotifyPropertyChanged, UserAndGroupTree
     {//一般
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;
@@ -21,6 +21,7 @@ namespace ShinfoServer
         // <---
         public bool IsGroup { get => false; }
         public BitmapImage Image { get => Data.UserIcon; }
+        public bool IsLogin { get; set; }
 
         private string _name;
         public string Name
@@ -75,6 +76,9 @@ namespace ShinfoServer
                 RaisePropertyChanged();
             }
         }
+
+        public List<GroupData> Groups = new List<GroupData>();
+
         public ObservableCollection<UserAndGroupTree> Nodes { get; set; }
         public string ToXml()
         {
@@ -99,6 +103,10 @@ namespace ShinfoServer
             ud.Level = (UserData.UserLevel)int.Parse(xml.Element("Level").Value);
 
             return ud;
+        }
+        public UserData Clone()
+        {
+            return (UserData)MemberwiseClone();
         }
         public enum UserLevel
         {

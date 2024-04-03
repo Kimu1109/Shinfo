@@ -52,11 +52,11 @@ namespace ShinfoServer
         }
         public static void LogWriteLineByBase(UserData UserData, string message, string info)
         {
-            File.AppendAllText(AppPath + "\\server.log", UserData.ID + " | " + message + " | " + info);
+            File.AppendAllText(AppPath + "\\server.log", UserData.ID + " | " + message + " | " + info + "\n");
         }
         public static string XmlHeader()
         {
-            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + Environment.NewLine;
         }
         /// <summary>
         /// ディレクトリをコピーする

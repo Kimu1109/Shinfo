@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Collections.ObjectModel;
 namespace IPC
 {
     public class UserInfo : MarshalByRefObject
@@ -38,6 +38,19 @@ namespace IPC
     }
     public static class Extension
     {
+        public static string ToMsg(this string str)
+        {
+            return str.Replace("&sr;", "/").Replace("&lf;", "\n").Replace("&dl;", "$").Replace("&per;", "%").Replace("&lab;", "<").Replace("&rab;", ">").Replace("&bsr;", "\\");
+        }
+        public static string ToStr(this string message)
+        {
+            return message.Replace("/", "&sr;").Replace("\n", "&lf;").Replace("$", "&dl;").Replace("%", "&per;").Replace("<", "&lab;").Replace(">", "&rab;").Replace("\\", "&bsr;");
+        }
+        public static string ToXML(this string source)
+        {
+            return source.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;");
+        }
+
         public static byte[] Compress(this byte[] src)
         {
             using (var ms = new MemoryStream())

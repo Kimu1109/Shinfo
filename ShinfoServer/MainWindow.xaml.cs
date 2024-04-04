@@ -142,6 +142,14 @@ namespace ShinfoServer
 
                     break;
             }
+
+            foreach(var dll in Data.DllData)
+            {
+                if (dll.IndexOfCommand(arr))
+                {
+                    dll.RunMethod(e.ClientData.client, e.Message);
+                }
+            }
         }
 
         private void AddGroup_Click(object sender, RoutedEventArgs e)

@@ -15,7 +15,7 @@ using System.Xml.Linq;
 
 namespace ShinfoServer
 {
-    public class GroupData : MarshalByRefObject, INotifyPropertyChanged, UserAndGroupTree
+    public class GroupData : INotifyPropertyChanged, UserAndGroupTree
     {
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;

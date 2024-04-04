@@ -43,11 +43,9 @@ namespace Chat
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {//送信
-            using(var tcp = new TCP(UserData.IP,UserData.Port,UserData.Password, UserData.ID))
-            {
-                tcp.ComLogin();
+            var c = new IpcClientChannel();
+            ChannelServices.RegisterChannel(c, true);
 
-            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

@@ -179,7 +179,7 @@ namespace ShinfoServer
             public TcpClient Client;
         }
     }
-    public class Client : MarshalByRefObject, INotifyPropertyChanged
+    public class Client : INotifyPropertyChanged
     {        
         // INotifyPropertyChanged impl --->
         public event PropertyChangedEventHandler PropertyChanged;

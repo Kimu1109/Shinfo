@@ -9,16 +9,19 @@ using System.Windows.Media.Imaging;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting;
+using ShinfoServer;
+using System.Net.Sockets;
+using System.Xml.Linq;
+using System.Reflection;
 
 namespace ShinfoServer
 {
     internal static class Data
-    {
-        internal static IpcServerChannel Channel;
-        
-
+    {        
         internal static ObservableCollection<UserData> Users = new ObservableCollection<UserData>();
         internal static ObservableCollection<GroupData> Groups = new ObservableCollection<GroupData>();
+
+        internal static List<DllData> DllData = new List<DllData> ();
 
         internal static BitmapImage GroupIcon = new BitmapImage(new Uri(AppPath + "\\img\\Home.png"));
         internal static BitmapImage UserIcon = new BitmapImage(new Uri(AppPath + "\\img\\Account.png"));
@@ -45,15 +48,27 @@ namespace ShinfoServer
             tcp.ListenStart();
             tcp.BackGroundProcess();
 
-            Channel = new IpcServerChannel("ShinfoServer");
-            ChannelServices.RegisterChannel(Channel, true);
-            RemotingServices.Marshal(tcp.clients, "TestObj", typeof(ObservableCollection<Client>));
-
             foreach (var file in Directory.GetFiles(AppPath + "\\data\\User"))
             {
                 Users.Add(UserData.ParseFromFile(file));
             }
             if (File.Exists(AppPath + "\\data\\Group.xml")) Groups = new ObservableCollection<GroupData>(GroupData.ParseFromFile(AppPath + "\\data\\Group.xml"));
+
+            var xml = XElement.Load(AppPath + "\\plugin\\config.xml");
+
+            foreach(var dll in xml.Elements("DLL"))
+            {
+                var assembly = Assembly.LoadFile(AppPath + "\\plugin\\DLL\\" + xml.Element("RelativePath").Value);
+                foreach(var command in dll.Element("Commands").Elements("Command"))
+                {
+                    string From = command.Element("From").Value;
+                    string Class = command.Element("Class").Value;
+                    string Method = command.Element("Method").Value;
+
+                    DllData.Add(new DllData(assembly, Class, Method, From));
+                }
+            }
+
         }
     }
 }

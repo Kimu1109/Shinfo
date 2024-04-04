@@ -72,6 +72,7 @@
     <Compile Include="Dialog\SelectUser.xaml.cs">
       <DependentUpon>SelectUser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DllData.cs" />
     <Compile Include="GroupData.cs" />
     <Compile Include="ProcessOfApp.cs" />
     <Compile Include="ProcessOfFile.cs" />
